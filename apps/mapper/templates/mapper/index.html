@@ -1,0 +1,28 @@
+<ul>
+{% for application in applications %}
+    <li>{{ application }}
+        {% with application.pulling as pulled %}
+            {% if pulled %}
+                <br />
+                <b>Pulling</b>
+                <ul>
+                    {% for app in pulled %}
+                        <li>{{ app }}</li>
+                    {% endfor %}
+                </ul>
+            {% endif %}
+        {% endwith %}
+        {% with application.pushing as pushed %}
+            {% if pushed %}
+                <br />
+                <b>Pushing</b>
+                <ul>
+                    {% for app in pushed %}
+                        <li>{{ app }}</li>
+                    {% endfor %}
+                </ul>
+            {% endif %}
+        {% endwith %}        
+    </li>
+{% endfor %}
+</ul>
