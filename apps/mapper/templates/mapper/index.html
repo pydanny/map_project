@@ -1,6 +1,6 @@
 <ul>
 {% for application in applications %}
-    <li>{{ application }}
+    <li>{{ application }}        
         {% with application.pulling as pulled %}
             {% if pulled %}
                 <br />

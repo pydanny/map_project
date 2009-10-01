@@ -79,7 +79,8 @@ INSTALLED_APPS = (
     'django.contrib.sessions',
     'django.contrib.sites',
     'django.contrib.admin',
-    'apps.mapper', 
+    'apps.mapper',
+    'apps.graphviz',     
 )
 
 try:

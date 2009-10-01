@@ -25,7 +25,6 @@ SHAPE_CHOICES = (
 class BaseModel(models.Model):
     
     title           = models.CharField(_('title'), max_length=200)
-    slug            = models.SlugField(_('slug'))
     created_at      = models.DateTimeField(_('created at'), default=datetime.now)
     modified_at     = models.DateTimeField(_('modified at'), default=datetime.now)    
     
@@ -54,24 +53,18 @@ class ApplicationType(BaseModel):
 class Application(BaseModel):
     
     application_type = models.ForeignKey(ApplicationType)
+    going_to = models.ManyToManyField('self', symmetrical=False, related_name='target', null=True, blank=True)
+    coming_from = models.ManyToManyField('self', symmetrical=False, related_name='source', null=True, blank=True)    
 
     def save(self, force_insert=False, force_update=False):
         self._save_helper()
         super(Application, self).save(force_insert, force_update)
         
     def pushing(self):
-        return [x.going_to for x in self.coming.all() if x]
+        return self.going_to.all()
 
     def pulling(self):
-        return [x.coming_from for x in self.going.all() if x]
-
-        
-        
-class Relationship(models.Model):
-
-    coming_from = models.ForeignKey(Application, related_name='coming')    
-    going_to    = models.ForeignKey(Application, related_name='going')
-    
+        return self.coming_from.all()
 
 class Mapp(BaseModel):
     description       = models.TextField(_('description'), max_length=200)    

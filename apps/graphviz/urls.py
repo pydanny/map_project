@@ -8,6 +8,7 @@ urlpatterns = patterns('',
     url(r'^(?P<application_id>\w+)\.(?P<format>\w+)$', 'apps.graphviz.views.application_image', 
                 name='graphviz_application_image'),        
     url(r'^(?P<application_id>\w+)/$', 'apps.graphviz.views.application', name='graphviz_application'),
+    
 
 
     

@@ -13,10 +13,10 @@ from django.utils.translation import ugettext_lazy as _
 from django.views.generic import date_based
 
 
-from apps.mapper.models import ApplicationType, Application, Relationship, Mapp
+from apps.mapper.models import ApplicationType, Application, Mapp
 
 def index(request, template_name="mapper/index.html"):
-    applications = Application.objects.select_related()
+    applications = Application.objects.all()
     
     return render_to_response(template_name, {
         "applications": applications,

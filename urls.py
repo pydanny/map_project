@@ -7,6 +7,7 @@ admin.autodiscover()
 urlpatterns = patterns('',
     # Example:
     (r'^', include('apps.mapper.urls')),
+    (r'^graphviz/', include('apps.graphviz.urls')),    
 
     # Uncomment the admin/doc line below and add 'django.contrib.admindocs' 
     # to INSTALLED_APPS to enable admin documentation:

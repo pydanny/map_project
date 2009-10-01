@@ -1,4 +1,4 @@
-from apps.mapper.models import ApplicationType, Application, Relationship, Mapp
+from apps.mapper.models import ApplicationType, Application, Mapp
 from django.contrib import admin
 
 class ApplicationTypeAdmin(admin.ModelAdmin):
@@ -15,10 +15,3 @@ class ApplicationAdmin(admin.ModelAdmin):
     search_fields       = ('title', 'application_type', )
 
 admin.site.register(Application, ApplicationAdmin)
-
-class RelationshipAdmin(admin.ModelAdmin):
-    list_display        = ('coming_from', 'going_to', )
-    list_filter         = ('coming_from', 'going_to', )
-    search_fields       = ('coming_from', 'going_to', )
-    
-admin.site.register(Relationship, RelationshipAdmin)
