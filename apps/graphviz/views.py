@@ -16,29 +16,9 @@ from django.views.generic import date_based
 
 import pygraphviz as pgv
 
+from apps.mapper.helpers import get_app
 from apps.mapper.models import Application, Mapp
 from apps.graphviz.helpers import create_graph
-
-def index(request, template_name="mapper/index.html"):
-    applications = Application.objects.all()
-    return render_to_response(template_name, {
-        "applications": applications,
-    }, context_instance=RequestContext(request))
-
-def get_app(application_id):
-    try:
-        application = Application.objects.get(title = application_id)
-    except Application.DoesNotExist:
-        application = get_object_or_404(Application, id = application_id)
-    return application
-
-def application(request, application_id, template_name="graphviz/application.html"):
-    
-    application = get_app(application_id)
-    
-    return render_to_response(template_name, {
-        "application": application,
-    }, context_instance=RequestContext(request))
     
 def make_node(graph, application):
     
@@ -48,11 +28,41 @@ def make_node(graph, application):
     node.attr['shape'] = str(application.application_type.shape)
     node.attr['color'] = str(application.application_type.color)
     node.attr['label'] = str(application.title)
-    node.attr['link'] = str(slug_title)    
+    node.attr['link'] = str('/graphviz/' + slug_title)
     return graph
+
+def index(request, format='gif',template_name="mapper/index.html"):
+
+    
+    graph = pgv.AGraph(strict=False,directed=True)
+    graph.graph_attr['label'] = 'Entire Map'
+    graph.node_attr['shape'] = 'box'
+    
+    edges = []
+    
+    for app in Application.objects.all():
+        
+        graph = make_node(graph, app)    
+        slug_app_title = slugify(app.title)  
+        
+        for loop_app in app.pulling():
+
+            graph = make_node(graph, loop_app)        
+            app_title = slugify(loop_app.title)
+            graph.add_edge(app_title, slug_app_title)            
+
+        for loop_app in app.pushing():
+            
+            graph = make_node(graph, loop_app)        
+            app_title = slugify(loop_app.title)            
+            graph.add_edge(slug_app_title, app_title)
+    
+    image = create_graph(graph.string(), format)
+    
+    return HttpResponse(image, mimetype="image/%s" % format)
     
 
-def application_image(request, application_id, format):
+def application(request, application_id, format):
     
     application = get_app(application_id)
     slug_app_title = slugify(application.title)     
@@ -69,11 +79,10 @@ def application_image(request, application_id, format):
         graph.add_edge(slugify(app.title), slug_app_title)        
 
     for app in application.pushing():
-
         graph = make_node(graph, app)        
         graph.add_edge(slug_app_title, slugify(app.title))
 
-    image = create_graph(graph.string())
+    image = create_graph(graph.string(), format)
     
-    return HttpResponse(image, mimetype="image/gif")
+    return HttpResponse(image, mimetype="image/%s" % format)
     

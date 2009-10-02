@@ -40,7 +40,7 @@ def create_graph(input_dot,format='gif',build_type='dot'):
     if not dot:
         return None
     tmp_fd, tmp_name = tempfile.mkstemp()
-    tmp_name = 'test.gif'
+    tmp_name = 'test.%s' % format
     os.close(tmp_fd)
     dot_file = file(tmp_name,'w+b')
     dot_file.write(input_dot)

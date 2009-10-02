@@ -81,6 +81,7 @@ INSTALLED_APPS = (
     'django.contrib.admin',
     'apps.mapper',
     'apps.graphviz',     
+    'apps.excell',         
 )
 
 try:

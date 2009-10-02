@@ -1,28 +1,27 @@
-<ul>
-{% for application in applications %}
-    <li>{{ application }}        
-        {% with application.pulling as pulled %}
-            {% if pulled %}
-                <br />
-                <b>Pulling</b>
-                <ul>
-                    {% for app in pulled %}
-                        <li>{{ app }}</li>
-                    {% endfor %}
-                </ul>
-            {% endif %}
-        {% endwith %}
-        {% with application.pushing as pushed %}
-            {% if pushed %}
-                <br />
-                <b>Pushing</b>
-                <ul>
-                    {% for app in pushed %}
-                        <li>{{ app }}</li>
-                    {% endfor %}
-                </ul>
-            {% endif %}
-        {% endwith %}        
-    </li>
-{% endfor %}
-</ul>
+{% extends 'base.html' %}
+
+{% block title %}Mapp App Home{% endblock %}
+
+{% block body %}
+
+<h1>Mapp App Home</h1>
+
+<div id="main_panel">
+    
+    <div id="nav_panel">        
+    <ul id="reports">        
+        <li><a href="{% url excel_report %}">Excel Report</a></li>
+    </ul>
+    <ul id="applications">
+    {% for application in applications %}
+        <li>{{ application }}</li>
+    {% endfor %}
+    </ul>
+    </div>
+
+    <div id="large_panel">
+        <img src="{% url graphviz_index %}" />
+    </div>
+</div>
+
+{% endblock %}

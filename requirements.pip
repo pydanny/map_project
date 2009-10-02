@@ -1,3 +1,4 @@
 # add dependencies here
 
 pygraphviz
+xlwt
